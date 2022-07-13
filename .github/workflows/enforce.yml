@@ -1,0 +1,27 @@
+name: IaC Enforce Tags
+
+on:
+  pull_request:
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  yor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        name: Checkout repo
+        with:
+          fetch-depth: 0
+          ref: ${{ github.head_ref }}
+      - name: Run yor action and commit
+        uses: bridgecrewio/yor-action@main
+        with:
+          commit_changes: false
+      - name: Check for Yor expected changes.
+        run: |
+        yor tag -d . --dry-run -o json --output-json-file result.json
+        if [ `jq '. |  .summary.updatedResources ' result.json` -eq 0 ] ; then echo "Resources to update, not Yor tag config compliant" ; exit 1 ; fi
+        if [ `jq '. |  .summary.newResources ' result.json` -eq 0 ] ; then echo "Resources to update, not Yor tag config compliant" ; exit 1 ; fi
+
