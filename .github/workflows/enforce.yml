@@ -21,7 +21,7 @@ jobs:
           commit_changes: false
       - name: Check for Yor expected changes.
         run: |
-        yor tag -d . --dry-run -o json --output-json-file result.json
-        if [ `jq '. |  .summary.updatedResources ' result.json` -eq 0 ] ; then echo "Resources to update, not Yor tag config compliant" ; exit 1 ; fi
-        if [ `jq '. |  .summary.newResources ' result.json` -eq 0 ] ; then echo "Resources to update, not Yor tag config compliant" ; exit 1 ; fi
+          yor tag -d . --dry-run -o json --output-json-file result.json
+          if [ `jq '. |  .summary.updatedResources ' result.json` -eq 0 ] ; then echo "Resources to update, not Yor tag config compliant" ; exit 1 ; fi
+          if [ `jq '. |  .summary.newResources ' result.json` -eq 0 ] ; then echo "Resources to update, not Yor tag config compliant" ; exit 1 ; fi
 
