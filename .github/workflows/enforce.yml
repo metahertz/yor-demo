@@ -15,13 +15,12 @@ jobs:
         with:
           fetch-depth: 0
           ref: ${{ github.head_ref }}
-      - name: Run yor action and commit
-        uses: bridgecrewio/yor-action@main
-        with:
-          commit_changes: false
       - name: Check for Yor expected changes.
         run: |
-          yor tag -d . --dry-run -o json --output-json-file result.json
+          wget https://github.com/bridgecrewio/yor/releases/download/0.1.150/yor_0.1.150_linux_amd64.tar.gz
+          tar -xzvf yor_0.1.150_linux_amd64.tar.gz
+          chmod +x ./yor
+          ./yor tag -d . --dry-run -o json --output-json-file result.json
           if [ `jq '. |  .summary.updatedResources ' result.json` -eq 0 ] ; then echo "Resources to update, not Yor tag config compliant" ; exit 1 ; fi
           if [ `jq '. |  .summary.newResources ' result.json` -eq 0 ] ; then echo "Resources to update, not Yor tag config compliant" ; exit 1 ; fi
 
